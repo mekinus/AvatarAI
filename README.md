@@ -16,8 +16,8 @@
 </p>
 
 <p align="center">
-  <img src="assets/screenshot1.png" alt="AvatarAI Gameplay" width="45%" />
-  <img src="assets/screenshot2.png" alt="AvatarAI Chat Interaction" width="45%" />
+  <img src="assets/ss01.jpg" alt="AvatarAI Gameplay" width="45%" />
+  <img src="assets/ss02.jpg" alt="AvatarAI Chat Interaction" width="45%" />
 </p>
 
 ---
