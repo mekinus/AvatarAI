@@ -1,4 +1,42 @@
-# Python
+# ================================
+# AvatarAI - .gitignore
+# ================================
+
+# ================================
+# ⚠️ IMPORTANT: Copyright & Legal
+# ================================
+# ROMs - DO NOT COMMIT (copyrighted material)
+python_ai/roms/*.gb
+python_ai/roms/*.gbc
+python_ai/roms/*.gba
+python_ai/roms/*.rom
+python_ai/roms/*.sav
+python_ai/roms/*.ram
+python_ai/roms/*.state
+*.gb
+*.gbc
+*.gba
+
+# Save states (may contain ROM data)
+*.state
+*.ram
+*.sav
+
+# ================================
+# 🔐 Secrets & Configuration
+# ================================
+# Config with API keys (use config.example.json as template)
+python_ai/config/config.json
+.env
+.env.*
+*.env
+
+# Twitch tokens
+python_ai/.tio.tokens.json
+
+# ================================
+# 🐍 Python
+# ================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,12 +46,27 @@ env/
 venv/
 ENV/
 .venv
+.pytest_cache/
+.mypy_cache/
+
+# ================================
+# 📦 Models & Large Files
+# ================================
+# Trained models (too large for GitHub)
+python_ai/models/*.zip
+python_ai/models/checkpoints/
+python_ai/models/logs/
+
+# ================================
+# 📝 Logs
+# ================================
 *.log
+python_ai/avatar_ai.log
+python_ai/training.log
 
-# Config (contém secrets)
-python_ai/config/config.json
-
-# Unity
+# ================================
+# 🎮 Unity
+# ================================
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -47,7 +100,20 @@ sysinfo.txt
 *.dll
 *.dylib
 
-# OS
+# ================================
+# 💻 IDE & OS
+# ================================
 .DS_Store
 Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ================================
+# 🔧 Misc
+# ================================
+.cursor/
+.agent/
 
