@@ -151,6 +151,7 @@ cp config/config.example.json config/config.json
 
 1. Open the `AvatarAI` folder in Unity Hub
 2. Import your 3D avatar model (VRM or FBX format)
+   - **Note:** The included `lowPolygirl.fbx` is a placeholder. For a unique identity, import your own character model.
 3. Configure the components:
    - Add `WebSocketServer` to an empty GameObject
    - Add `GameCommandReceiver` to your player object
@@ -268,6 +269,23 @@ AvatarAI/
 3. Get your API key from settings
 
 ---
+
+## 🧠 AI Training & Troubleshooting
+
+The AI model is trained using Reinforcement Learning (PPO). For a detailed guide on training strategies, hyperparameter tuning, and handling common behaviors, see the [Training Guide](python_ai/TRAINING.md).
+
+### Known Issues
+- **Getting Stuck**: The AI may occasionally get stuck in movement loops or corners due to local optima.
+- **Manual Intervention**: You may need to take manual control briefly (using the terminal) to unstuck the agent.
+- **Complex Menus**: Infinite loops in menus can occur if the AI hasn't learned the exit sequence.
+
+## 📦 Third-Party Dependencies
+
+### KlakNDI
+This project uses **KlakNDI** for NDI video integration to send the Unity view to the Python brain.
+- This package is required for the vision system.
+- **Important:** The [NDI Runtime](https://ndi.video/tools/ndi-core-suite/) is proprietary software and must be installed separately on your machine.
+- If you are using a custom version of KlakNDI, ensure you comply with its specific licensing terms.
 
 ## 🤝 Contributing
 
