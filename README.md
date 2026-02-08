@@ -15,6 +15,11 @@
   Inspired by Neuro-Sama, AvatarAI is a complete system for creating an AI streamer that plays games (like Pokémon) in real-time while interacting with your Twitch audience through a 3D avatar.
 </p>
 
+<p align="center">
+  <img src="assets/screenshot1.png" alt="AvatarAI Gameplay" width="45%" />
+  <img src="assets/screenshot2.png" alt="AvatarAI Chat Interaction" width="45%" />
+</p>
+
 ---
 
 ## ✨ Features
