@@ -1,0 +1,377 @@
+/* ══════════════════════════════════════════════════════════════
+   AvatarAI Stream Overlay — Stylesheet
+   Tema: Azul/Cyan glassmorphism inspirado em AI VTuber Shizuku
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables ─────────────────────────────────────────── */
+:root {
+    /* Cores principais */
+    --primary: #5ec4e6;
+    --primary-light: #a0e4f5;
+    --primary-dark: #2a8ab5;
+    --accent: #7dd3fc;
+    --accent-glow: rgba(94, 196, 230, 0.4);
+
+    /* Glass */
+    --glass-bg: rgba(255, 255, 255, 0.12);
+    --glass-bg-strong: rgba(255, 255, 255, 0.18);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --glass-shadow: rgba(0, 0, 0, 0.15);
+
+    /* Chat bolhas */
+    --chat-bubble-bg: rgba(255, 255, 255, 0.85);
+    --chat-bubble-text: #1a1a2e;
+    --chat-username: #2a8ab5;
+
+    /* Speech box */
+    --speech-bg: rgba(20, 30, 50, 0.75);
+    --speech-text: #ffffff;
+    --speech-border: rgba(94, 196, 230, 0.5);
+
+    /* Tipografia */
+    --font-main: 'Inter', 'Outfit', sans-serif;
+    --font-display: 'Outfit', 'Inter', sans-serif;
+
+    /* Tamanhos */
+    --chat-width: 380px;
+    --speech-max-width: 900px;
+    --border-radius: 16px;
+    --border-radius-sm: 10px;
+}
+
+/* ── Reset e Base ──────────────────────────────────────────── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: transparent;
+    font-family: var(--font-main);
+    color: #fff;
+}
+
+.hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(10px) !important;
+}
+
+/* ── Topic Bar ─────────────────────────────────────────────── */
+.topic-bar {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.topic-label {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.8;
+}
+
+.topic-text {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Chat Container ────────────────────────────────────────── */
+.chat-container {
+    position: absolute;
+    top: 100px;
+    right: 40px;
+    width: var(--chat-width);
+    max-height: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-light);
+    letter-spacing: 1px;
+}
+
+.chat-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--primary);
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 540px;
+    overflow: hidden;
+    padding: 8px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-top: none;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+/* ── Chat Message Bubble ───────────────────────────────────── */
+.chat-message {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 14px;
+    background: var(--chat-bubble-bg);
+    border-radius: var(--border-radius-sm);
+    animation: slideInRight 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: opacity 0.6s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.chat-message::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--primary);
+    border-radius: 3px 0 0 3px;
+}
+
+.chat-message.fading {
+    opacity: 0;
+    transform: translateX(20px);
+}
+
+.chat-username {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--chat-username);
+    letter-spacing: 0.3px;
+}
+
+.chat-text {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--chat-bubble-text);
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* Cor de destaque customizada por user */
+.chat-message[data-color]::before {
+    background: attr(data-color);
+}
+
+/* ── Avatar Speech Box ─────────────────────────────────────── */
+.speech-box {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: var(--speech-max-width);
+    min-width: 400px;
+    padding: 20px 32px;
+    background: var(--speech-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1.5px solid var(--speech-border);
+    border-radius: var(--border-radius);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 60px var(--accent-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.speech-box.hidden {
+    transform: translateX(-50%) translateY(20px) !important;
+}
+
+.speech-indicator {
+    display: flex;
+    gap: 4px;
+    padding-top: 6px;
+    flex-shrink: 0;
+}
+
+.speech-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: speechPulse 1.4s infinite ease-in-out;
+    box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.speech-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.speech-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.speech-text {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--speech-text);
+    line-height: 1.5;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.speech-text .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--primary);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 0.8s infinite;
+}
+
+/* ── Event Alert ───────────────────────────────────────────── */
+.event-alert {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 28px;
+    background: linear-gradient(135deg, rgba(94, 196, 230, 0.2), rgba(125, 211, 252, 0.15));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1.5px solid var(--glass-border);
+    border-radius: 50px;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.2),
+        0 0 40px var(--accent-glow);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    white-space: nowrap;
+}
+
+.event-alert.hidden {
+    transform: translateX(-50%) translateY(-30px) !important;
+}
+
+.event-icon {
+    font-size: 28px;
+    animation: eventBounce 0.6s ease;
+}
+
+.event-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.event-subtitle {
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--primary-light);
+    opacity: 0.9;
+}
+
+/* ── Connection Status ─────────────────────────────────────── */
+.connection-status {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.status-dot.connected {
+    background: #4ade80;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
+.status-dot.disconnected {
+    background: #f87171;
+    box-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+}
+
+/* ── Animations ────────────────────────────────────────────── */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes speechPulse {
+    0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes eventBounce {
+    0% { transform: scale(0.3); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}

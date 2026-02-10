@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>AvatarAI Stream Overlay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="overlay.css">
+</head>
+<body>
+    <!-- ── Topic / Status Indicator ── -->
+    <div id="topic-bar" class="topic-bar hidden">
+        <span class="topic-label">Now talking...</span>
+        <span id="topic-text" class="topic-text"></span>
+    </div>
+
+    <!-- ── Chat Feed (lado direito) ── -->
+    <div id="chat-container" class="chat-container">
+        <div class="chat-header">
+            <svg class="chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Comments</span>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+    </div>
+
+    <!-- ── Avatar Speech Box (parte inferior) ── -->
+    <div id="speech-box" class="speech-box hidden">
+        <div class="speech-indicator">
+            <div class="speech-dot"></div>
+            <div class="speech-dot"></div>
+            <div class="speech-dot"></div>
+        </div>
+        <div id="speech-text" class="speech-text"></div>
+    </div>
+
+    <!-- ── Event Alert (centro superior) ── -->
+    <div id="event-alert" class="event-alert hidden">
+        <div class="event-icon">✨</div>
+        <div class="event-content">
+            <div id="event-title" class="event-title"></div>
+            <div id="event-subtitle" class="event-subtitle"></div>
+        </div>
+    </div>
+
+    <!-- ── Connection Status (debug) ── -->
+    <div id="connection-status" class="connection-status">
+        <div class="status-dot disconnected"></div>
+    </div>
+
+    <script src="overlay.js"></script>
+</body>
+</html>
