@@ -23,6 +23,7 @@ from planner_layer.executor import Executor
 from planner_layer.unity_client import UnityClient
 from state_machine.state_manager import StateManager, State
 from tts_layer.tts_service import TTSService
+from overlay_layer.overlay_server import OverlayServer
 
 # Imports para Pokémon (opcionais)
 try:
@@ -131,9 +132,18 @@ class AvatarAISystem:
         self.pokemon_enabled = False
         
         # Thread Pool reutilizável para visão
-        # Thread Pool reutilizável para visão
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.rl_executor = ThreadPoolExecutor(max_workers=1)
+        
+        # Overlay server para OBS Browser Source
+        overlay_config = self.config.get("overlay", {})
+        if overlay_config.get("enabled", True):
+            self.overlay_server = OverlayServer(
+                ws_port=overlay_config.get("ws_port", 8767),
+                http_port=overlay_config.get("http_port", 8768)
+            )
+        else:
+            self.overlay_server = None
         
         logger.info("Sistema AvatarAI inicializado")
     
@@ -183,6 +193,10 @@ class AvatarAISystem:
         
         # Conecta ao Unity
         await self.unity_client.connect()
+        
+        # Inicia overlay server
+        if self.overlay_server:
+            await self.overlay_server.start()
         
         # Cria chat listener
         twitch_config = self.config.get("twitch", {})
@@ -586,6 +600,10 @@ class AvatarAISystem:
             # Envia para Unity
             await self.unity_client.send_say(comment, audio_data=audio_data, audio_format=audio_format)
             
+            # Envia para overlay (fala da avatar)
+            if self.overlay_server:
+                await self.overlay_server.broadcast_avatar_speech(comment)
+            
             # Envia para chat do Twitch se configurado
             comments_config = self.config.get("gameplay_comments", {})
             send_to_chat = comments_config.get("send_to_chat", False)
@@ -599,6 +617,10 @@ class AvatarAISystem:
     
     def _on_chat_message(self, username: str, message: str):
         """Callback chamado quando uma mensagem do chat é recebida."""
+        # Envia para overlay (todas as mensagens, sem rate limit)
+        if self.overlay_server:
+            asyncio.create_task(self.overlay_server.broadcast_chat(username, message))
+        
         # Adiciona à fila para processamento assíncrono
         asyncio.create_task(self.chat_queue.put((username, message)))
     
@@ -706,6 +728,13 @@ class AvatarAISystem:
         }
         event_type_str = event_type_map.get(event.event_type, "unknown")
         
+        # Envia para overlay
+        if self.overlay_server:
+            await self.overlay_server.broadcast_event(event_type_str, {
+                "username": event.display_name,
+                **event.data
+            })
+        
         # Brain processa evento
         decision = await self.brain.process_event(
             event_type=event_type_str,
@@ -801,6 +830,10 @@ class AvatarAISystem:
             # Envia fala para Unity (com áudio se disponível)
             await self.unity_client.send_say(decision_value, audio_data=audio_data, audio_format=audio_format)
             
+            # Envia fala para overlay
+            if self.overlay_server and decision_value:
+                await self.overlay_server.broadcast_avatar_speech(decision_value)
+            
             # Envia fala para o chat do Twitch
             if self.chat_listener and decision_value:
                 await self.chat_listener.send_chat_message(decision_value)
@@ -831,6 +864,11 @@ class AvatarAISystem:
         
         if self.events_listener:
             await self.events_listener.stop()
+        
+        # Para overlay server
+        if self.overlay_server:
+            await self.overlay_server.stop()
+            logger.info("Overlay server parado")
         
         # Para ManualController
         if self.manual_controller:
